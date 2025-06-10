@@ -69,15 +69,6 @@ export default function TitleBar() {
             className="transition-colors duration-300 hover:stroke-[#8FFFE0]"
           />
         </div>
-
-        <div className="  rounded-full bg-red">
-          <UserIcon
-            size={24}
-            strokeWidth={1.5}
-            color="#CFCFCF"
-            className="transition-colors duration-300 hover:stroke-[#8FFFE0]"
-          />
-        </div>
       </div>
     </header>
   );
