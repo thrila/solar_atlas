@@ -2,10 +2,9 @@ import { createPortal } from "react-dom";
 
 interface Props {
   children: React.ReactNode;
-  lngLat: [number, number];
 }
 
-export default function PopupPortal({ children, lngLat }: Props) {
+export default function PopupPortal({ children }: Props) {
   const popupEl = document.getElementById("popup-root");
   if (!popupEl) return null;
 
@@ -13,12 +12,8 @@ export default function PopupPortal({ children, lngLat }: Props) {
     <div
       style={{
         position: "absolute",
-        left: `${lngLat[0]}px`,
-        top: `${lngLat[1]}px`,
-        background: "white",
-        border: "1px solid #ccc",
-        padding: "8px",
-        borderRadius: "4px",
+        right: `10px`,
+        top: `100px`,
         zIndex: 20,
       }}
     >
