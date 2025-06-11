@@ -22,3 +22,22 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python-specific files and directories
+# Byte-code files
+*.pyc
+__pycache__/
+
+# Distribution / packaging
+.Python
+env/
+venv/
+pip-log.txt
+pip-delete-this-directory/
+
+# C extensions
+*.so
+
+# Unit test / coverage
+.coverage
+.tox/
