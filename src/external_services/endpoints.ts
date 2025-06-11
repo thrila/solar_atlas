@@ -17,7 +17,7 @@ export class ExternalEndpoints {
       return { lat: parseFloat(lat), lon: parseFloat(lon) };
     } catch (err) {
       console.error("getCoordinatesWithName failed:", err);
-      return null; // or throw err to bubble up
+      return { lat: 0, lon: 0 }; // or throw err to bubble up
     }
   }
   static async getCity(lng: number, lat: number) {
@@ -31,6 +31,19 @@ export class ExternalEndpoints {
     } catch (err) {
       console.error("getCity:", err);
       return null; // or throw err to bubble up
+    }
+  }
+  static async getLocationSuggestion(query: string) {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=5`,
+      );
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.log(`getLocationSuggestion`, err);
+      return null;
     }
   }
 }

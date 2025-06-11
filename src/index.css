@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@theme {
+  --animate-wiggle: wiggle 0.5s ease-in-out infinite;
+
+  @keyframes wiggle {
+
+    0%,
+    100% {
+      transform: rotate(-9deg);
+    }
+
+    50% {
+      transform: rotate(9deg);
+    }
+  }
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

@@ -33,28 +33,44 @@ const EnergyInfo = (Data: SolarEstimate) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3 text-sm text-[#B0B0B5]">
-          <div className="space-y-0.5">
+          <div
+            className="space-y-0.5"
+            aria-label="System size: 6.65 kilowatts with 19 panels"
+            title="System size: 6.65 kW (19 panels)"
+          >
             <p className="text-[#777] text-xs">System Size</p>
             <p className="text-[#EDEDED] font-medium">6.65 kW (19 panels)</p>
           </div>
-          <div className="space-y-0.5">
+          <div
+            className="space-y-0.5"
+            aria-label="Annual Output: 9,700 kWh"
+            title="Annual Output: 9,700 kWh"
+          >
             <p className="text-[#777] text-xs">Annual Output</p>
             <p className="text-[#EDEDED] font-medium">9,700 kWh</p>
           </div>
-          <div className="space-y-0.5">
+          <div className="space-y-0.5" aria-label="Roof Space: 32 m²" title="Roof Space: 32 m²">
             <p className="text-[#777] text-xs">Roof Space</p>
             <p className="text-[#EDEDED] font-medium">32 m²</p>
           </div>
-          <div className="space-y-0.5">
+          <div
+            className="space-y-0.5"
+            aria-label="Sunlight: 5.3hrs/day"
+            title="Sunlight: 5.3hrs/day"
+          >
             <p className="text-[#777] text-xs">Sunlight</p>
             <p className="text-[#EDEDED] font-medium">5.3 hrs/day</p>
           </div>
-          <div className="space-y-0.5">
+          <div className="space-y-0.5" aria-label="Est. Cost: $19,950" title="Est. Cost: $19,950">
             <p className="text-[#777] text-xs">Est. Cost</p>
             <p className="text-[#EDEDED] font-medium">$19,950</p>
             <p className="text-xs text-[#666]">→ $13,965 after ITC</p>
           </div>
-          <div className="space-y-0.5">
+          <div
+            className="space-y-0.5"
+            aria-label="Payback: 9–10 yrs @ $0.15/kWh"
+            title="Payback: 9–10 yrs @ $0.15/kWh"
+          >
             <p className="text-[#777] text-xs">Payback</p>
             <p className="text-[#EDEDED] font-medium">9–10 yrs @ $0.15/kWh</p>
           </div>
