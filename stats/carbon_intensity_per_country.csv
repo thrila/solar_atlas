@@ -1,0 +1,238 @@
+,Entity,Carbon intensity of electricity - gCO2/kWh
+22,ASEAN (Ember),554.26764
+47,Afghanistan,125.0
+71,Africa,550.2502
+95,Africa (Ember),550.2832
+120,Albania,24.390245
+144,Algeria,633.6503
+168,American Samoa,611.1111
+192,Angola,172.15483
+216,Antigua and Barbuda,611.1111
+240,Argentina,392.87186
+265,Armenia,240.8907
+290,Aruba,550.0
+313,Asia,594.30774
+337,Asia (Ember),590.86273
+362,Australia,577.86163
+387,Austria,141.0634
+412,Azerbaijan,671.3891
+437,Bahamas,653.65857
+460,Bahrain,902.7466
+484,Bangladesh,676.4792
+509,Barbados,605.5046
+533,Belarus,439.21463
+558,Belgium,139.4042
+583,Belize,170.21277
+607,Benin,595.95953
+631,Bermuda,650.79364
+655,Bhutan,24.14113
+679,Bolivia,485.86118
+704,Bosnia and Herzegovina,683.1804
+729,Botswana,847.6563
+753,Brazil,103.32709
+778,British Virgin Islands,647.05884
+802,Brunei,892.8572
+826,Bulgaria,476.33255
+851,Burkina Faso,568.0473
+875,Burundi,230.76924
+899,Cambodia,305.16434
+924,Cameroon,280.9816
+948,Canada,156.79489
+973,Cape Verde,480.0
+996,Cayman Islands,642.8571
+1020,Central African Republic,0.0
+1043,Chad,615.38464
+1066,Chile,372.80313
+1091,China,586.7002
+1116,Colombia,202.1482
+1141,Comoros,642.8572
+1165,Congo,709.3496
+1189,Cook Islands,250.0
+1212,Costa Rica,24.115757
+1237,Cote d'Ivoire,413.16418
+1261,Croatia,244.68085
+1286,Cuba,640.2556
+1310,Cyprus,555.13306
+1335,Czechia,488.3554
+1360,Democratic Republic of Congo,27.397259
+1384,Denmark,201.20033
+1409,Djibouti,450.0
+1433,Dominica,600.0
+1457,Dominican Republic,580.0631
+1482,EU (Ember),291.70627
+1504,East Timor,666.6667
+1528,Ecuador,181.18571
+1553,Egypt,574.7312
+1578,El Salvador,112.95181
+1603,Equatorial Guinea,602.64905
+1627,Eritrea,590.90906
+1651,Estonia,487.6958
+1676,Eswatini,127.27273
+1700,Ethiopia,23.549685
+1724,Europe,318.9479
+1748,Europe (Ember),329.6908
+1773,European Union (27),291.70627
+1797,Falkland Islands,1000.0
+1820,Faroe Islands,354.1667
+1843,Fiji,280.37384
+1867,Finland,129.83234
+1892,France,78.55024
+1917,French Guiana,204.08163
+1940,French Polynesia,436.61972
+1963,G20 (Ember),487.50784
+1988,G7 (Ember),375.76334
+2013,Gabon,429.46707
+2037,Gambia,666.6667
+2061,Georgia,167.01755
+2086,Germany,420.10654
+2111,Ghana,469.4229
+2135,Gibraltar,571.4286
+2159,Greece,376.8144
+2184,Greenland,111.11111
+2207,Grenada,666.6667
+2230,Guadeloupe,493.90244
+2253,Guam,611.11115
+2276,Guatemala,191.39465
+2300,Guinea,185.0
+2324,Guinea-Bissau,625.0
+2347,Guyana,653.5433
+2371,Haiti,534.6535
+2394,High-income countries,398.7797
+2418,Honduras,293.1181
+2442,Hong Kong,682.2715
+2466,Hungary,228.89882
+2491,Iceland,27.679918
+2515,India,702.8098
+2540,Indonesia,675.9309
+2564,Iran,655.17053
+2589,Iraq,688.70465
+2613,Ireland,332.9366
+2638,Israel,595.85913
+2662,Italy,378.16324
+2687,Jamaica,561.24725
+2710,Japan,519.6191
+2735,Jordan,539.21136
+2758,Kazakhstan,831.5557
+2783,Kenya,109.567894
+2808,Kiribati,500.0
+2831,Kosovo,945.00726
+2856,Kuwait,636.8859
+2881,Kyrgyzstan,146.88857
+2906,Laos,237.26488
+2930,Latin America and Caribbean (Ember),259.51196
+2955,Latvia,135.18886
+2980,Lebanon,379.8627
+3004,Lesotho,20.833334
+3027,Liberia,435.89746
+3051,Libya,830.5326
+3075,Lithuania,180.69307
+3100,Low-income countries,273.10455
+3123,Lower-middle-income countries,615.04095
+3147,Luxembourg,141.66666
+3172,Macao,448.97958
+3195,Madagascar,477.2727
+3218,Malawi,54.64481
+3241,Malaysia,604.0407
+3266,Maldives,611.76465
+3290,Mali,391.70508
+3314,Malta,500.0
+3339,Martinique,516.7785
+3362,Mauritania,481.70734
+3385,Mauritius,615.38464
+3409,Mexico,472.58563
+3434,Middle East (Ember),654.4757
+3459,Moldova,647.27954
+3484,Mongolia,781.9355
+3504,Montenegro,483.3837
+3529,Montserrat,1000.0
+3552,Morocco,662.6419
+3577,Mozambique,127.81187
+3601,Myanmar,563.871
+3626,Namibia,45.454544
+3650,Nauru,750.0
+3674,Nepal,23.364487
+3697,Netherlands,326.07062
+3722,New Caledonia,585.7605
+3745,New Zealand,112.836914
+3770,Nicaragua,289.35184
+3794,Niger,696.2025
+3818,Nigeria,497.3684
+3843,North America,384.04166
+3867,North America (Ember),376.55014
+3892,North Korea,344.25613
+3915,North Macedonia,624.5791
+3940,Norway,29.638288
+3965,OECD (Ember),371.28616
+3990,Oceania,514.1319
+4014,Oceania (Ember),514.1623
+4039,Oman,547.3708
+4064,Pakistan,436.58423
+4089,Palestine,460.78433
+4112,Panama,168.97958
+4136,Papua New Guinea,529.41174
+4160,Paraguay,24.71095
+4184,Peru,287.81302
+4209,Philippines,602.6722
+4234,Poland,732.9787
+4259,Portugal,225.33994
+4284,Puerto Rico,660.804
+4309,Qatar,602.7322
+4334,Reunion,525.22253
+4357,Romania,297.77127
+4382,Russia,438.42017
+4407,Rwanda,288.46155
+4431,Saint Helena,1000.0
+4454,Saint Kitts and Nevis,636.36365
+4477,Saint Lucia,649.99994
+4500,Saint Pierre and Miquelon,600.0
+4523,Saint Vincent and the Grenadines,600.0
+4547,Samoa,375.0
+4571,Sao Tome and Principe,555.55554
+4594,Saudi Arabia,700.11957
+4618,Senegal,526.6667
+4642,Serbia,710.67737
+4667,Seychelles,564.5161
+4691,Sierra Leone,50.0
+4715,Singapore,504.21646
+4740,Slovakia,142.04973
+4765,Slovenia,257.48505
+4790,Solomon Islands,636.36365
+4814,Somalia,523.8095
+4838,South Africa,729.72516
+4863,South America,181.38441
+4887,South Korea,438.18445
+4900,South Sudan,611.1111
+4924,Spain,217.1339
+4949,Sri Lanka,509.78137
+4972,Sudan,204.41
+4996,Suriname,374.40762
+5020,Sweden,41.028603
+5045,Switzerland,37.25903
+5070,Syria,682.27094
+5093,Taiwan,639.26575
+5118,Tajikistan,86.55189
+5143,Tanzania,349.27234
+5167,Thailand,561.1244
+5192,Togo,477.7778
+5216,Tonga,625.0
+5240,Trinidad and Tobago,682.1053
+5264,Tunisia,565.62354
+5289,Turkey,487.89618
+5314,Turkmenistan,1306.1351
+5338,Turks and Caicos Islands,653.8462
+5362,Uganda,57.391308
+5385,Ukraine,256.21008
+5408,United Arab Emirates,556.84564
+5432,United Kingdom,250.76793
+5457,United States,410.3674
+5482,United States Virgin Islands,632.35297
+5506,Upper-middle-income countries,551.98206
+5530,Uruguay,110.363396
+5555,Uzbekistan,1121.3534
+5579,Vanuatu,500.0
+5603,Venezuela,180.42738
+5627,Vietnam,415.48795
+5662,World,489.7454
+5687,Yemen,584.1584
+5711,Zambia,111.96713
+5735,Zimbabwe,297.53918

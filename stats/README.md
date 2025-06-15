@@ -2,6 +2,7 @@
 [Data source for total population of countries](https://population.un.org/wpp/downloads?folder=Standard%20Projections&group=Most%20used)
 [Data for total population of countries](https://data.worldbank.org/indicator/SP.POP.TOTL) --- will probably use this
 [Data source for energy consumption per country](https://data.worldbank.org/indicator/EG.USE.ELEC.KH.PC)
+[Data source for carbon intensity](https://ourworldindata.org/grapher/carbon-intensity-electricity?utm_source=chatgpt.com)
 
 
 First off, we want to find how much electricity a family uses in different countries around the world
@@ -10,7 +11,6 @@ with this data we will compute how many kw of electricity the customers unit wil
 
 ### To annual family use per country:
 household_kWh = kWh_per_person * avg_household_size
-
 
 
 

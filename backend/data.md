@@ -10,3 +10,4 @@ Austin gets ~5.3 full sun hours/day. Data is based on NREL averages.
 source to find data per country: https://ourworldindata.org/
 Average Mean of Electricity a US house consumes anually = 10,791 kWh/year
 
+
