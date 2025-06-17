@@ -3,6 +3,8 @@
 [Data for total population of countries](https://data.worldbank.org/indicator/SP.POP.TOTL) --- will probably use this
 [Data source for energy consumption per country](https://data.worldbank.org/indicator/EG.USE.ELEC.KH.PC)
 [Data source for carbon intensity](https://ourworldindata.org/grapher/carbon-intensity-electricity?utm_source=chatgpt.com)
+Notice that although this is good enough the data collection locations might not be ideal, went for an emprical option instead
+[World estimates on tilt angles paper](https://web.stanford.edu/group/efmh/jacobson/Articles/I/TiltAngles.pdf)
 
 
 First off, we want to find how much electricity a family uses in different countries around the world

@@ -1,7 +1,5 @@
-from typing import AnyStr
 import requests
 import datetime
-from collections import defaultdict  # Useful for grouping daily data
 
 
 class SunLightDuration:
@@ -82,105 +80,44 @@ class SunLightDuration:
                 )
             return {}
 
-    def get_daily_sunshine_duration(self, start_year, end_year):
-        all_daily_sunshine_hours = defaultdict(
-            float
-        )  # Using defaultdict for easy accumulation
+    def get_daily_sunshine_duration(self, date: datetime.date):
+        date_str = date.strftime("%Y%m%d")
+        params = {
+            "parameters": self.param_hourly_irradiance,
+            "community": "RE",
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "start": date_str,
+            "end": date_str,
+            "format": "JSON",
+        }
 
-        for year in range(start_year, end_year + 1):
-            for month in range(1, 13):  # Iterate through each month
-                # Calculate start and end dates for the current month
-                current_month_start = datetime.date(year, month, 1)
-                # Find the last day of the month
-                if month == 12:
-                    current_month_end = datetime.date(year, month, 31)
-                else:
-                    current_month_end = datetime.date(
-                        year, month + 1, 1
-                    ) - datetime.timedelta(days=1)
+        try:
+            response = requests.get(self.url_hourly, params=params, timeout=30)
+            response.raise_for_status()
+            data = response.json()
 
-                start_date_month_str = current_month_start.strftime("%Y%m%d")
-                end_date_month_str = current_month_end.strftime("%Y%m%d")
+            if "properties" in data and "parameter" in data["properties"]:
+                irradiance_data = data["properties"]["parameter"][
+                    self.param_hourly_irradiance
+                ]
 
-                params_hourly = {
-                    "parameters": self.param_hourly_irradiance,
-                    "community": "RE",
-                    "latitude": self.latitude,
-                    "longitude": self.longitude,
-                    "start": start_date_month_str,
-                    "end": end_date_month_str,
-                    "format": "JSON",
-                }
-
-                print(
-                    f"\n--- Requesting Hourly Data for {start_date_month_str} to {end_date_month_str} ---"
-                )
-                # print(f"API Call: {url_hourly}?{requests.compat.urlencode(params_hourly)}") # For debugging URL
-
-                try:
-                    response = requests.get(
-                        self.url_hourly, params=params_hourly, timeout=60
-                    )  # Increased timeout for hourly data
-                    response.raise_for_status()
-                    hourly_data = response.json()
-
-                    if (
-                        "properties" in hourly_data
-                        and "parameter" in hourly_data["properties"]
-                        and self.param_hourly_irradiance
-                        in hourly_data["properties"]["parameter"]
-                    ):
-                        param_data = hourly_data["properties"]["parameter"][
-                            self.param_hourly_irradiance
-                        ]
-
-                        for timestamp, value in param_data.items():
-                            # Timestamp format is YYYYMMDDHH (e.g., "2022010101" for 1 AM on Jan 1)
-                            date_key = timestamp[:8]  # Extract the YYYYMMDD part
-
-                            # Ensure value is numeric and not None
-                            if value is not None:
-                                try:
-                                    hour_irradiance = float(value)
-                                    if hour_irradiance > self.sunshine_threshold:
-                                        all_daily_sunshine_hours[date_key] += (
-                                            1.0  # Count as one sunshine hour
-                                        )
-                                except ValueError:
-                                    print(
-                                        f"Warning: Non-numeric value '{value}' for {hourly_param} at {timestamp}. Skipping."
-                                    )
-                            else:
-                                # print(f"Info: Null value for {hourly_param} at {timestamp}. Skipping.")
-                                pass  # Null values are common for night hours or missing data
-
-                        print(f"Processed hourly data for {year}-{month:02d}.")
-                    else:
-                        print(
-                            f"Warning: Hourly data for '{self.param_hourly_irradiance}' not found in expected structure for {year}-{month:02d}."
-                        )
-                        print(
-                            hourly_data.get("messages", "No specific error messages.")
+                sunshine_hours = 0.0
+                for timestamp, value in irradiance_data.items():
+                    if value is not None and float(value) >= self.sunshine_threshold:
+                        sunshine_hours += (
+                            1.0  # Count 1 hour if irradiance exceeds threshold
                         )
 
-                except requests.exceptions.Timeout:
-                    print(f"Request timed out for hourly data for {year}-{month:02d}.")
-                except requests.exceptions.RequestException as e:
-                    print(f"Error fetching hourly data for {year}-{month:02d}: {e}")
-                    if response and response.text:
-                        print(
-                            "API Response (error details):",
-                            response.json().get("messages", response.text),
-                        )
+                return sunshine_hours
 
-        # Convert defaultdict to regular dict and sort by date for consistent output
-        sorted_daily_sunshine_hours = dict(sorted(all_daily_sunshine_hours.items()))
-        return sorted_daily_sunshine_hours
+        except requests.RequestException as e:
+            print(f"Error fetching data for {date_str}: {e}")
+            return 0.0
 
 
 if __name__ == "__main__":
-    location = SunLightDuration("9.0", "7.5", "20220101", "20220101")
+    location = SunLightDuration("10.0", "8.0", "20220101", "20220101")
     ans = location.get_daily_solar_intensity()
-    answer = location.get_daily_sunshine_duration(2022, 2022)
+    answer = location.get_daily_sunshine_duration(datetime.date(2024, 6, 10))
     print(answer)
-    # print(ans)
