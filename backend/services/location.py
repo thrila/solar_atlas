@@ -43,6 +43,3 @@ def get_location_name(lat: float, lon: float) -> dict:
 
     except Exception as e:
         return {"error": f"Reverse geocoding failed: {str(e)}"}
-
-
-print(get_location_name(31.2638905, -98.5456116))
