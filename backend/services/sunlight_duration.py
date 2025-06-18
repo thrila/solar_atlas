@@ -28,6 +28,7 @@ class SunLightDuration:
         self.sunshine_threshold = sunshine_threshold
 
     def get_daily_solar_intensity(self):
+        """Solar intensity"""
         params = {
             "parameters": self.param_daily_intensity,
             "community": "RE",
@@ -44,7 +45,6 @@ class SunLightDuration:
             )  # Added timeout
             response.raise_for_status()  # Raise an HTTPError for bad responses (4xx or 5xx)
             data = response.json()
-            print(data)
             daily_intensity_data = {}
             if (
                 "properties" in data
@@ -62,13 +62,13 @@ class SunLightDuration:
                     f"Warning: Solar intensity data not found in expected structure for {self.start_date} to {self.end_date}."
                 )
                 print(data.get("messages", "No specific error messages."))
-            return daily_intensity_data
+            return daily_intensity_data[self.start_date]
 
         except requests.exceptions.Timeout:
             print(
                 f"Request timed out for daily intensity for {self.start_date} to {self.end_date}."
             )
-            return {}
+            return 0.0
         except requests.exceptions.RequestException as e:
             print(
                 f"Error fetching daily solar intensity for {self.start_date} to {self.end_date}: {e}"
@@ -78,9 +78,10 @@ class SunLightDuration:
                     "API Response (error details):",
                     response.json().get("messages", response.text),
                 )
-            return {}
+            return 0.0
 
     def get_daily_sunshine_duration(self, date: datetime.date):
+        """Solar sunshine > 120w in hours"""
         date_str = date.strftime("%Y%m%d")
         params = {
             "parameters": self.param_hourly_irradiance,
@@ -115,9 +116,18 @@ class SunLightDuration:
             print(f"Error fetching data for {date_str}: {e}")
             return 0.0
 
+    def find_ideal_direction(self, latitude):
+        if latitude > 5:
+            return 180  # True South
+        elif latitude < -5:
+            return 0  # True North
+        else:
+            return 90
+
 
 if __name__ == "__main__":
     location = SunLightDuration("10.0", "8.0", "20220101", "20220101")
     ans = location.get_daily_solar_intensity()
+    print(f"solar intensity {ans}")
     answer = location.get_daily_sunshine_duration(datetime.date(2024, 6, 10))
     print(answer)

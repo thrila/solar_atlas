@@ -11,3 +11,19 @@ source to find data per country: https://ourworldindata.org/
 Average Mean of Electricity a US house consumes anually = 10,791 kWh/year
 
 
+app/
+├── api/
+│   ├── v1/
+│   │   ├── endpoints.py     # All routes
+│   │   └── __init__.py
+│   └── __init__.py
+├── core/
+│   ├── logic.py             # Business logic (solar calcs, etc)
+│   └── geo_utils.py         # Geocoding helper (get_lon_lat)
+├── db/
+│   ├── db_utils.py          # SQLite connection logic
+│   └── __init__.py
+├── main.py                  # App entrypoint
+└── __init__.py
+
+

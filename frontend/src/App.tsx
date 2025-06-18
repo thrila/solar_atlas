@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { MapContext } from "./components/MapContext";
 import { ExternalEndpoints } from "./external_services/endpoints";
 import "maplibre-gl/dist/maplibre-gl.css";
+import "./controller.css";
 import maplibregl from "maplibre-gl";
 import TitleBar from "./components/Titlebar";
 import EnergyInfo from "./components/EnergyInfo";
@@ -22,7 +23,7 @@ export default function App() {
       });
       instance.on("click", async (e) => {
         const { lng, lat } = e.lngLat;
-
+        console.log(lng, lat);
         instance.flyTo({
           center: [lng, lat],
           zoom: 5,
@@ -30,6 +31,7 @@ export default function App() {
         });
       });
 
+      instance.addControl(new maplibregl.NavigationControl({ showCompass: true }), "bottom-left");
       setMap(instance);
     }
   }, []);
