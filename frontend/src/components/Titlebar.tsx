@@ -17,7 +17,6 @@ export default function TitleBar() {
   }, []);
 
   useEffect(() => {
-    console.log(searchInput.value);
     const timeout = setTimeout(() => {
       if (searchInput.value.length > 3) {
         ExternalEndpoints.getLocationSuggestion(searchInput.value).then((data) => {
@@ -49,8 +48,8 @@ export default function TitleBar() {
   return (
     <header className="w-full absolute top-0 z-10">
       <div
-        className={`flex flex-row items-start items-center space-x-2 w-[99%] border border-[#2A2B30] bg-[rgba(29,30,34,0.6)] text-white px-4 mx-auto my-1 rounded-xl transition-all duration-300 ${
-          open ? "pb-8 pt-2" : "py-2"
+        className={`flex flex-row items-start items-center space-x-2 w-[99%] border border-[#2A2B30] bg-[rgba(29,30,34,0.6)] text-white px-4 mx-auto my-1 rounded-xl transition-all duration-500 ease-in-out ${
+          open ? "pb-3 pt-2" : "py-2"
         }`}
       >
         <div className="">
@@ -104,13 +103,13 @@ export default function TitleBar() {
                     type="number"
                     step="any"
                     placeholder="Enter value A"
-                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 rounded-md outline-none placeholder:text-sm"
+                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-sm"
                   />
                   <input
                     type="number"
                     step="any"
                     placeholder="Enter value B"
-                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 rounded-md outline-none placeholder:text-sm"
+                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-sm"
                   />
                 </div>
               </div>
@@ -119,9 +118,8 @@ export default function TitleBar() {
         </div>
 
         <div className="flex justify-center py-2">
-          <button onClick={renderAdvanced}>
+          <button onClick={renderAdvanced} title="Advanced">
             <SettingsIcon
-              title="Advanced"
               size={24}
               strokeWidth={1.5}
               color="#CFCFCF"
