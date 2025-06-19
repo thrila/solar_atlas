@@ -37,7 +37,7 @@ def get_location_name(lat: float, lon: float) -> dict:
         data = res.json()
 
         return {
-            "location_name": data.get("display_name", "unknown"),
+            "location_name": data["address"].get("country", "unknown"),
             "raw": data,  # optional: inspect full data
         }
 

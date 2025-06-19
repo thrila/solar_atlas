@@ -5,6 +5,18 @@ from db.db import query_db
 import datetime
 
 
+def get_row(country: str):
+    data = query_db(
+        'SELECT * FROM test_table WHERE "Country Name" = ?', [country], one=True
+    )
+    return {
+        "average_family_size": data["Avg_Household_Size"],
+        "kWh_per_person": data["kWh_per_person"],
+        "population": data["Population"],
+        "carbon_intensity": data["Carbon intensity of electricity - gCO2/kWh"],
+    }
+
+
 def post_location_name(location: str):
     coords = get_lon_lat(location)
     lat = coords["lat"]
@@ -36,7 +48,9 @@ def post_long_lat(long: float, lat: float):
     solar_intensity = sun_attr.get_daily_solar_intensity()
     sunlight_duration = sun_attr.get_daily_sunshine_duration(datetime.date(2022, 1, 1))
     direction = sun_attr.find_ideal_direction(lat)
-
+    print(location_name)
+    row = get_row(location_name)
+    print(row)
     return {
         "solar_intensity": solar_intensity,
         "solar_duration": sunlight_duration,
@@ -45,6 +59,7 @@ def post_long_lat(long: float, lat: float):
         "location": location_name,
         "angle_of_panel": lat,
         "direction": direction,
+        "row": row,
     }
 
 
@@ -56,6 +71,7 @@ def estimate_panels(long: float, lat: float, energy: float):
     direction = sun_attr.find_ideal_direction(lat)
     en = Energy(330, sunlight_duration)
     panels_needed = en.number_of_panels(energy)
+    row = get_row(location_name)
 
     return {
         "solar_intensity": solar_intensity,
@@ -67,6 +83,7 @@ def estimate_panels(long: float, lat: float, energy: float):
         "direction": direction,
         "number_of_panels": panels_needed,
         "power": energy,
+        "row": row,
     }
 
 
@@ -90,12 +107,3 @@ def estimate_energy(long: float, lat: float, number_of_panels: int):
         "panel_number": number_of_panels,
         "power": power,
     }
-
-
-def see_row():
-    query = 'SELECT "Country Name" FROM test_table'
-    results = query_db(query)
-    return results
-
-
-print(see_row())

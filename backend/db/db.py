@@ -1,6 +1,11 @@
 import sqlite3
+import os
 
-DB_PATH = "./test.sqlite"
+# Always resolves to: backend/db/test.sqlite
+DB_PATH = os.path.join(os.path.dirname(__file__), "test.sqlite")
+
+
+# DB_PATH = "./test.sqlite"
 
 
 def get_connection():
