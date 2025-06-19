@@ -33,6 +33,7 @@ __pycache__/
 env/
 venv/
 dvenv/
+wsl_venv/
 pip-log.txt
 pip-delete-this-directory/
 

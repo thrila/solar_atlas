@@ -1,6 +1,7 @@
 from services.location import get_lon_lat, get_location_name
 from services.sunlight_duration import SunLightDuration
 from services.energy import Energy
+from db.db import query_db
 import datetime
 
 
@@ -89,3 +90,12 @@ def estimate_energy(long: float, lat: float, number_of_panels: int):
         "panel_number": number_of_panels,
         "power": power,
     }
+
+
+def see_row():
+    query = 'SELECT "Country Name" FROM test_table'
+    results = query_db(query)
+    return results
+
+
+print(see_row())
