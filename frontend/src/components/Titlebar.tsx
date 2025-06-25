@@ -38,7 +38,7 @@ export default function TitleBar() {
     }
     resetSearchInput();
     setSuggestions([]);
-    setOpen(!open);
+    setOpen(false);
   };
 
   const renderAdvanced = () => {

@@ -53,59 +53,40 @@ def post_long_lat(long: float, lat: float):
     """
     Logic for the post_long_lat route
     """
-    sun_attr = SunLightDuration(lat, long, "20220101", "20220101")
     location_name = get_location_name(lat, long)["location_name"]
-    solar_intensity = sun_attr.get_daily_solar_intensity()
-    sunlight_duration = sun_attr.get_daily_sunshine_duration(datetime.date(2022, 1, 1))
-    direction = sun_attr.find_ideal_azimuth(lat)
-    en = Energy(330, sunlight_duration)
-    energy_w = en.amount_of_power()
     convert = Conversion()
-    row = get_row(location_name)
-    print(row)
+    meta_data, energy = get_solar_metadata(lat, long)
+    energy_w = energy.amount_of_power()
     # NOTE: this data is annually man
     row = get_row(location_name)
     average_household_size = row["average_household_size"]
     kWh_per_person = row["kWh_per_person"]
     population = row["population"]
     carbon_intensity = row["carbon_intensity"]
-    kilowatt_per_household = en.kWh_per_household(
+    kilowatt_per_household = energy.kWh_per_household(
         kWh_per_person, average_household_size
     )
-    national_energy_demand = en.national_energy_demand(
+    national_energy_demand = energy.national_energy_demand(
         kilowatt_per_household, population
     )
-    co_saving_potential = en.co2_saving_potential(
+    co_saving_potential = energy.co2_saving_potential(
         convert.watts_to_kilowatts(energy_w) * 365, carbon_intensity
     )
 
     return {
-        "daily_solar_irradiance": solar_intensity,
-        "sunlight_hours_per_day": sunlight_duration,
-        "lat": lat,
-        "lon": long,
-        "location": location_name,
-        "tilt_angle": lat,
-        "azimuth_angle": direction,
+        **meta_data,
         "average_household_size": average_household_size,
         "kilowatt_per_household": kilowatt_per_household,
         "co_saving_potential": co_saving_potential,
         "national_energy_demand": national_energy_demand,
-        "kWh_per_person": kWh_per_person,
-        "population": population,
-        "carbon_intensity": carbon_intensity,
+        **row,
     }
 
 
 def estimate_panels(long: float, lat: float, energy_w: float):
-    sun_attr = SunLightDuration(lat, long, "20220101", "20220101")
     location_name = get_location_name(lat, long)["location_name"]
-    solar_intensity = sun_attr.get_daily_solar_intensity()
-    sunlight_duration = sun_attr.get_daily_sunshine_duration(datetime.date(2022, 1, 1))
-    direction = sun_attr.find_ideal_azimuth(lat)
-    en = Energy(330, sunlight_duration)
+    meta_data, energy = get_solar_metadata(lat, long)
     convert = Conversion()
-    panels_needed = en.number_of_panels(energy_w)
 
     # NOTE: this data is annually man
     row = get_row(location_name)
@@ -113,53 +94,58 @@ def estimate_panels(long: float, lat: float, energy_w: float):
     kWh_per_person = row["kWh_per_person"]
     population = row["population"]
     carbon_intensity = row["carbon_intensity"]
-    kilowatt_per_household = en.kWh_per_household(
+    panels_needed = energy.number_of_panels(energy_w)
+    kilowatt_per_household = energy.kWh_per_household(
         kWh_per_person, average_household_size
     )
-    national_energy_demand = en.national_energy_demand(
+    national_energy_demand = energy.national_energy_demand(
         kilowatt_per_household, population
     )
-    co_saving_potential = en.co2_saving_potential(
+    co_saving_potential = energy.co2_saving_potential(
         convert.watts_to_kilowatts(energy_w) * 365, carbon_intensity
     )
 
     return {
-        "daily_solar_irradiance": solar_intensity,
-        "sunlight_hours_per_day": sunlight_duration,
-        "lat": lat,
-        "lon": long,
+        **meta_data,
         "location": location_name,
-        "tilt_angle": lat,
-        "azimuth_angle": direction,
         "number_of_panels": panels_needed,
         "output_power": energy_w,
         "power_per_household_annually": kilowatt_per_household,
         "national_energy_demand_annually": national_energy_demand,
         "carbon_saved_annually": co_saving_potential,
-        "average_household_size": average_household_size,
-        "kWh_per_person": kWh_per_person,
-        "population": population,
         "carbon_intensity": carbon_intensity,
+        **row,
     }
 
 
 def estimate_energy(long: float, lat: float, number_of_panels: int):
-    sun_attr = SunLightDuration(lat, long, "20220101", "20220101")
     location_name = get_location_name(lat, long)["location_name"]
-    solar_intensity = sun_attr.get_daily_solar_intensity()
-    sunlight_duration = sun_attr.get_daily_sunshine_duration(datetime.date(2022, 1, 1))
-    direction = sun_attr.find_ideal_azimuth(lat)
-    en = Energy(330, sunlight_duration)
-    power = en.amount_of_power(number_of_panels)
+    convert = Conversion()
+    meta_data, energy = get_solar_metadata(lat, long)
+    energy_w = energy.amount_of_power(number_of_panels)
+    row = get_row(location_name)
+    average_household_size = row["average_household_size"]
+    kWh_per_person = row["kWh_per_person"]
+    population = row["population"]
+    carbon_intensity = row["carbon_intensity"]
+    kilowatt_per_household = energy.kWh_per_household(
+        kWh_per_person, average_household_size
+    )
+    national_energy_demand = energy.national_energy_demand(
+        kilowatt_per_household, population
+    )
+    co_saving_potential = energy.co2_saving_potential(
+        convert.watts_to_kilowatts(energy_w) * 365, carbon_intensity
+    )
 
     return {
-        "daily_solar_irradiance": solar_intensity,
-        "sunlight_hours_per_day": sunlight_duration,
-        "lat": lat,
-        "lon": long,
+        **meta_data,
         "location": location_name,
-        "tilt_angle": lat,
-        "azimuth_angle": direction,
         "number_of_panels": number_of_panels,
-        "output_power": power,
+        "output_power": energy_w,
+        "power_per_household_annually": kilowatt_per_household,
+        "national_energy_demand_annually": national_energy_demand,
+        "carbon_saved_annually": co_saving_potential,
+        "carbon_intensity": carbon_intensity,
+        **row,
     }

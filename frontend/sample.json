@@ -1,0 +1,18 @@
+{
+  "location": "Nigeria",
+  "daily_solar_irradiance": 5.78,
+  "sunlight_hours_per_day": 9,
+  "azimuth_angle": 180,
+  "tilt_angle": 9.082,
+  "lat": 9.082,
+  "lon": 8.6753,
+  "number_of_panels": 20,
+  "output_power": 59400,
+  "power_per_household_annually": 631.9114219465215,
+  "national_energy_demand_annually": 141011600000.00034,
+  "carbon_saved_annually": 10783.444280400001,
+  "carbon_intensity": 497.3684,
+  "average_household_size": "4.66",
+  "kWh_per_person": 135.603309430584,
+  "population": 223150896
+}
