@@ -21,7 +21,7 @@ export default function App() {
       const instance = new maplibregl.Map({
         container: mapRef.current,
         style: ExternalEndpoints.mapStyle,
-        center: [0, 0],
+        center: [32, 15],
         zoom: 2,
       });
       instance.on("click", async (e) => {
@@ -47,18 +47,30 @@ export default function App() {
     return () => clearInterval(interval); // cleanup on unmount
   }, []);
 
+  useEffect(() => {
+    const setHeight = () => {
+      if (mapRef.current) {
+        mapRef.current.style.height = `${window.innerHeight}px`;
+      }
+    };
+
+    setHeight();
+    window.addEventListener("resize", setHeight);
+    return () => window.removeEventListener("resize", setHeight);
+  }, []);
+
   return (
     <MapContext.Provider value={map}>
       <TitleBar />
       <PopupPortal>
         <div
-          className={`fixed top-1/2 right-0  w-[24rem] px-5 transition-transform duration-700
+          className={`fixed md:top-1/3  top-1/2 right-0  w-[24rem] px-5 transition-transform duration-700
                   ${showPanel ? "translate-x-0" : "translate-x-full"}`}
         >
-          <EnergyInfo data={solarData} loading={true} />
+          <EnergyInfo data={solarData} loading={false} />
         </div>
       </PopupPortal>
-      <div ref={mapRef} style={{ width: "100vw", height: "100vh" }} />
+      <div ref={mapRef} style={{ width: "100vw" }} />
     </MapContext.Provider>
   );
 }
