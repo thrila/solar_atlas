@@ -9,11 +9,12 @@ def get_row(country: str):
     data = query_db(
         'SELECT * FROM test_table WHERE "Country Name" = ?', [country], one=True
     )
+    kco2 = float(data["Carbon intensity of electricity - gCO2/kWh"])
     return {
         "average_family_size": data["Avg_Household_Size"],
         "kWh_per_person": data["kWh_per_person"],
         "population": data["Population"],
-        "carbon_intensity": data["Carbon intensity of electricity - gCO2/kWh"],
+        "carbon_intensity": kco2,
     }
 
 
@@ -50,6 +51,9 @@ def post_long_lat(long: float, lat: float):
     direction = sun_attr.find_ideal_direction(lat)
     print(location_name)
     row = get_row(location_name)
+    en = Energy(330, sunlight_duration)
+    kco2 = en.emission_factor_kg(row["carbon_intensity"])
+    yearly_power = en.power_per_year(sunlight_duration)
     print(row)
     return {
         "solar_intensity": solar_intensity,
@@ -59,7 +63,8 @@ def post_long_lat(long: float, lat: float):
         "location": location_name,
         "angle_of_panel": lat,
         "direction": direction,
-        "row": row,
+        "carbon_emmission": kco2,
+        "power_yearly": yearly_power,
     }
 
 

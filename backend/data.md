@@ -10,6 +10,15 @@ Austin gets ~5.3 full sun hours/day. Data is based on NREL averages.
 source to find data per country: https://ourworldindata.org/
 Average Mean of Electricity a US house consumes anually = 10,791 kWh/year
 
+| Component              | Qty | Unit Price | Estimated Total       |
+| ---------------------- | --- | ---------- | --------------------- |
+| 300 W Solar Panel      | 2   | \$161.79   | **\$323.58**          |
+| 30 A MPPT Controller   | 1   | \$139.99   | **\$139.99**          |
+| Battery Bank (≥ 5 kWh) | —   | \~\$4,000  | **\$4,000** (approx.) |
+| Pure Sine Inverter     | 1   | \~\$800    | **\$800** (approx.)   |
+| Mounting & Wiring Kit  | —   | \~\$300    | **\$300** (approx.)   |
+| **Total Estimate**     | —   | —          | **≈ \$5,500**         |
+
 
 app/
 ├── api/
