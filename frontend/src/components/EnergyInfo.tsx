@@ -1,32 +1,14 @@
-import SearchIcon from "/src/assets/search.svg?react";
 import SunIcon from "/src/assets/sun.svg?react";
-import PopupPortal from "./PopupPortal";
 import InfoBlock from "./InfoBlock";
+import type { SolarEstimation } from "../types/index";
 
-type SolarEstimate = {
-  location: string;
-  daily_solar_irradiance: number; // e.g., 5.78 kWh/m²/day
-  sunlight_hours_per_day: number; // e.g., 9
-  azimuth_angle: number; // e.g., 180°
-  tilt_angle: number; // e.g., same as latitude
-  lat: number;
-  lon: number;
-  number_of_panels: number;
-  output_power: number; // total daily output (kWh/day)
-  power_per_household_annually: number; // in kWh/year
-  national_energy_demand_annually: number; // in kWh/year
-  carbon_saved_annually: number; // in kg CO₂/year
-  carbon_intensity: number; // in g CO₂ / kWh
-  average_household_size: string; // keep as string if raw from dataset
-  kWh_per_person: number; // personal avg consumption/year
-  population: number;
-};
-
-const EnergyInfo = ({ data, loading }: { data: SolarEstimate; loading: boolean }) => {
+const EnergyInfo = ({ data, loading }: { data: SolarEstimation; loading: boolean }) => {
   return (
     <div className="w-full max-w-xl flex flex-col justify-start rounded-2xl border border-[#2C2C35] bg-[rgba(26,26,31,0.9)] p-5 text-[#EDEDED] backdrop-blur-md shadow-sm space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium tracking-tight text-white">Nigeria Solar Summary</h2>
+        <h2 className="text-sm font-medium tracking-tight text-white">
+          {`${loading && data.location} Solar Summary`}{" "}
+        </h2>
         <span className="text-xs text-[#8FFFE0] border border-[#2C2C35] bg-[#1A1A1F] px-2 py-0.5 rounded-md">
           {loading ? (
             <span className="animate-pulse">•••</span>

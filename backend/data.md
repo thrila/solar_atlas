@@ -26,4 +26,9 @@ app/
 ├── main.py                  # App entrypoint
 └── __init__.py
 
+## User Input
+- Location 
+- Panel power output
+- number of panels.
 
+add output per panel  in response

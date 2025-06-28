@@ -1,3 +1,5 @@
+import type { SolarEstimation, SolarDataType } from "../types/index";
+
 export class ExternalEndpoints {
   static MAP_TOKEN = import.meta.env.VITE_MAP_TOKEN;
   static mapStyle = `https://api.maptiler.com/maps/darkmatter/style.json?key=${this.MAP_TOKEN}`;
@@ -43,6 +45,32 @@ export class ExternalEndpoints {
       return data;
     } catch (err) {
       console.log(`getLocationSuggestion`, err);
+      return null;
+    }
+  }
+  static async getSolarData({
+    lon,
+    lat,
+    power,
+    numberOfPanels,
+  }: SolarDataType): Promise<SolarEstimation | null> {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/v1/estimate_energy?long=${lon}&lat=${lat}&panel_number=${numberOfPanels}&panel_output=${power}`,
+        {
+          method: "POST",
+        },
+      );
+
+      if (!res.ok) {
+        console.error(`Server error: ${res.status}`);
+        return null;
+      }
+
+      const data: SolarEstimation = await res.json();
+      return data;
+    } catch (err) {
+      console.error("Fetch error:", err);
       return null;
     }
   }

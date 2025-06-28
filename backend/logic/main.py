@@ -19,12 +19,12 @@ def get_row(country: str) -> dict[str, float | int]:
     }
 
 
-def get_solar_metadata(lat: float, lon: float, panel_output=330):
+async def get_solar_metadata(lat: float, lon: float, panel_output=330):
     date = datetime.date(2022, 1, 1)
     sun_attr = SunLightDuration(lat, lon, "20220101", "20220101")
     location_name = get_location_name(lat, lon)["location_name"]
-    sunlight_duration = sun_attr.get_daily_sunshine_duration(date)
-    solar_intensity = sun_attr.get_daily_solar_intensity()
+    sunlight_duration = await sun_attr.get_daily_sunshine_duration(date)
+    solar_intensity = await sun_attr.get_daily_solar_intensity()
     direction = sun_attr.find_ideal_azimuth(lat)
     energy = Energy(panel_output, sunlight_duration)
 
@@ -118,10 +118,12 @@ def estimate_panels(long: float, lat: float, energy_w: float):
     }
 
 
-def estimate_energy(long: float, lat: float, number_of_panels: int):
+async def estimate_energy(
+    long: float, lat: float, number_of_panels: int, panel_output=330
+):
     location_name = get_location_name(lat, long)["location_name"]
     convert = Conversion()
-    meta_data, energy = get_solar_metadata(lat, long)
+    meta_data, energy = await get_solar_metadata(lat, long, panel_output)
     energy_w = energy.amount_of_power(number_of_panels)
     row = get_row(location_name)
     average_household_size = row["average_household_size"]

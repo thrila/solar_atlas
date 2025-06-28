@@ -4,11 +4,21 @@ import { ExternalEndpoints } from "../external_services/endpoints";
 import SearchIcon from "/src/assets/search.svg?react";
 import SettingsIcon from "/src/assets/settings.svg?react";
 import { useMap } from "./MapContext";
+import type { SolarEstimation, TitleBarProps } from "../types/index";
 
-export default function TitleBar() {
+export default function TitleBar({
+  setShowPanel,
+  setLocationSolarInfo,
+  setLoading,
+}: TitleBarProps) {
+  const initialPanel = 1;
+  const initialPower = 1000; // in watts
+
   const map = useMap();
   const [suggestions, setSuggestions] = useState([]);
   const [searchInput, resetSearchInput] = useInput("");
+  const [powerInput] = useInput(initialPower);
+  const [panelInput] = useInput(initialPanel);
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
 
@@ -27,7 +37,12 @@ export default function TitleBar() {
     return () => clearTimeout(timeout);
   }, [searchInput.value]);
 
-  const handleSubmit = async (location: string) => {
+  const handleSubmit = async (location: string, power: number, numberOfPanels: number) => {
+    setShowPanel(() => true);
+    setLoading(() => true);
+    resetSearchInput();
+    setSuggestions([]);
+    setOpen(false);
     const { lat, lon } = await ExternalEndpoints.getCoordinatesWithName(location);
     if (map) {
       map.flyTo({
@@ -36,14 +51,43 @@ export default function TitleBar() {
         essential: true,
       });
     }
-    resetSearchInput();
-    setSuggestions([]);
-    setOpen(false);
+    const test = await ExternalEndpoints.getSolarData({
+      lon,
+      lat,
+      power,
+      numberOfPanels,
+    });
+    setLocationSolarInfo(test);
+    console.log(test);
+    setLoading(() => false);
   };
 
-  const renderAdvanced = () => {
-    setOpen(!open);
-  };
+  const handleFocus = () => setShowPanel(() => false);
+  const renderAdvanced = () => setOpen(() => !open);
+
+  useEffect(() => {
+    if (map) {
+      map.on("click", async (e) => {
+        setLoading(() => true);
+        setShowPanel(() => true);
+        const { lng, lat } = e.lngLat;
+        map.flyTo({
+          center: [lng, lat],
+          zoom: 5,
+          essential: true,
+        });
+        console.log(lng, lat);
+        const test = await ExternalEndpoints.getSolarData({
+          lon: lng,
+          lat,
+          power: powerInput.value,
+          numberOfPanels: panelInput.value,
+        });
+        setLocationSolarInfo(test);
+        setLoading(() => false);
+      });
+    }
+  }, []);
 
   return (
     <header className="w-full absolute top-0 z-10">
@@ -57,66 +101,70 @@ export default function TitleBar() {
   ${open ? "opacity-100 py-3" : "opacity-90 py-2"}`}
       >
         <div className="">
-          <div className="relative w-full  transition-all duration-300 ease-in-out">
+          <div className="relative w-full transition-all duration-300 ease-in-out">
             {/* 🔍 Search Form */}
             <form
-              className="flex rounded-full overflow-hidden bg-[#1D1E22] border border-[#2A2B30] shadow-[inset_0_0_1px_#00000066]"
+              className="flex flex-col space-y-4"
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSubmit(searchInput.value);
+                handleSubmit(searchInput.value, powerInput.value, panelInput.value);
               }}
             >
-              <input
-                {...searchInput}
-                type="search"
-                ref={inputRef}
-                placeholder="Search..."
-                aria-label="Search"
-                className="flex-1 bg-transparent px-4 py-2 text-[#CFCFCF] placeholder-[#888888] placeholder:italic outline-none placeholder:text-sm"
-              />
-              <button
-                type="submit"
-                title="Search"
-                aria-label="Submit search"
-                className="flex items-center justify-center cursor-pointer px-4 bg-[#1D1E22] hover:stroke-[#8FFFE0] transition-colors hover:animate-wiggle"
-              >
-                <SearchIcon size={24} strokeWidth={1.5} color="#CFCFCF" />
-              </button>
+              {/* Search Bar */}
+              <div className="flex rounded-full overflow-hidden bg-[#1D1E22] border border-[#2A2B30] shadow-[inset_0_0_1px_#00000066]">
+                <input
+                  {...searchInput}
+                  type="search"
+                  onFocus={handleFocus}
+                  ref={inputRef}
+                  placeholder="Search..."
+                  aria-label="Search"
+                  className="flex-1 bg-transparent px-4 py-2 text-[#CFCFCF] placeholder-[#888888] placeholder:italic outline-none placeholder:text-sm"
+                />
+                <button
+                  type="submit"
+                  title="Search"
+                  aria-label="Submit search"
+                  className="flex items-center justify-center cursor-pointer px-4 bg-[#1D1E22] hover:stroke-[#8FFFE0] transition-colors hover:animate-wiggle"
+                >
+                  <SearchIcon size={24} strokeWidth={1.5} color="#CFCFCF" />
+                </button>
+              </div>
+
+              {/*  Advanced Inputs */}
+              {open && (
+                <div className="flex space-x-4">
+                  <input
+                    {...panelInput}
+                    type="number"
+                    step="any"
+                    placeholder="no of solar panels"
+                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-xs"
+                  />
+                  <input
+                    {...powerInput}
+                    type="number"
+                    step="any"
+                    placeholder="power per panel (W)"
+                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-xs"
+                  />
+                </div>
+              )}
             </form>
 
-            {/* 🔽 Suggestions Dropdown */}
+            {/*  Suggestions Dropdown (outside the form) */}
             {suggestions.length > 0 && (
               <ul className="absolute left-0 right-0 z-50 mt-1 rounded-md bg-[#1D1E22] border border-[#2C2C35] bg-[rgba(29,30,34,0.6)] text-sm text-[#CFCFCF]">
                 {suggestions.map((item, idx) => (
                   <li
                     key={idx}
                     className="px-4 py-2 cursor-pointer hover:bg-[#2A2B30] border-t border-[#2C2C35]"
-                    onClick={() => handleSubmit(item.name)}
+                    onClick={() => handleSubmit(item.name, powerInput.value, panelInput.value)}
                   >
                     {item.display_name}
                   </li>
                 ))}
               </ul>
-            )}
-
-            {/* 🧮 Advanced Inputs Shown Below Search */}
-            {open && (
-              <div className="mt-4 transition-all duration-300 ease-in-out">
-                <div className="flex space-x-4">
-                  <input
-                    type="number"
-                    step="any"
-                    placeholder="Enter value A"
-                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-sm"
-                  />
-                  <input
-                    type="number"
-                    step="any"
-                    placeholder="Enter value B"
-                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-sm"
-                  />
-                </div>
-              </div>
             )}
           </div>
         </div>
