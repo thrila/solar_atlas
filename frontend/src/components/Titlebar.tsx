@@ -11,8 +11,8 @@ export default function TitleBar({
   setLocationSolarInfo,
   setLoading,
 }: TitleBarProps) {
-  const initialPanel = 1;
-  const initialPower = 1000; // in watts
+  const initialPanel = 5;
+  const initialPower = 330; // in watts
 
   const map = useMap();
   const [suggestions, setSuggestions] = useState([]);
@@ -66,28 +66,26 @@ export default function TitleBar({
   const renderAdvanced = () => setOpen(() => !open);
 
   useEffect(() => {
-    if (map) {
-      map.on("click", async (e) => {
-        setLoading(() => true);
-        setShowPanel(() => true);
-        const { lng, lat } = e.lngLat;
-        map.flyTo({
-          center: [lng, lat],
-          zoom: 5,
-          essential: true,
-        });
-        console.log(lng, lat);
-        const test = await ExternalEndpoints.getSolarData({
-          lon: lng,
-          lat,
-          power: powerInput.value,
-          numberOfPanels: panelInput.value,
-        });
-        setLocationSolarInfo(test);
-        setLoading(() => false);
+    if (!map) return;
+
+    const handleClick = async (e) => {
+      setLoading(true);
+      setShowPanel(true);
+      const { lng, lat } = e.lngLat;
+      map.flyTo({ center: [lng, lat], zoom: 5, essential: true });
+      const data = await ExternalEndpoints.getSolarData({
+        lon: lng,
+        lat,
+        power: powerInput.value,
+        numberOfPanels: panelInput.value,
       });
-    }
-  }, []);
+      setLocationSolarInfo(data);
+      setLoading(false);
+    };
+
+    map.on("click", handleClick);
+    return () => map.off("click", handleClick);
+  }, [map, powerInput.value, panelInput.value]);
 
   return (
     <header className="w-full absolute top-0 z-10">

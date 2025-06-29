@@ -6,9 +6,13 @@ const EnergyInfo = ({ data, loading }: { data: SolarEstimation; loading: boolean
   return (
     <div className="w-full max-w-xl flex flex-col justify-start rounded-2xl border border-[#2C2C35] bg-[rgba(26,26,31,0.9)] p-5 text-[#EDEDED] backdrop-blur-md shadow-sm space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium tracking-tight text-white">
-          {`${loading && data.location} Solar Summary`}{" "}
-        </h2>
+        {loading ? (
+          <span className="animate-pulse">••••••</span>
+        ) : (
+          <h2 className="text-sm font-medium tracking-tight text-white">
+            {`${data.location} Solar Summary`}
+          </h2>
+        )}
         <span className="text-xs text-[#8FFFE0] border border-[#2C2C35] bg-[#1A1A1F] px-2 py-0.5 rounded-md">
           {loading ? (
             <span className="animate-pulse">•••</span>
