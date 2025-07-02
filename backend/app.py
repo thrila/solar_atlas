@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from logic.main import (
@@ -9,6 +10,15 @@ from logic.main import (
 )
 
 app = FastAPI()
+
+origins = ["http://localhost:5173", "http://192.168.131:5173", "*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Create an API Router
 v1_router = APIRouter(
@@ -48,11 +58,13 @@ async def get_kwh(long: float, lat: float, energy: float):
 
 
 @v1_router.post("/estimate_energy")
-async def get_panel_number(long: float, lat: float, panel_number: int):
+async def get_panel_number(
+    long: float, lat: float, panel_number: int, panel_output: int
+):
     """
     Recieves Longitude and Latitude via a post request and returns data
     """
-    return estimate_energy(long, lat, panel_number)
+    return await estimate_energy(long, lat, panel_number, panel_output)
 
 
 @app.exception_handler(StarletteHTTPException)

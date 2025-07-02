@@ -1,4 +1,5 @@
 import requests
+import httpx
 import datetime
 
 
@@ -27,7 +28,7 @@ class SunLightDuration:
         self.end_date = end_date
         self.sunshine_threshold = sunshine_threshold
 
-    def get_daily_solar_intensity(self):
+    async def get_daily_solar_intensity(self):
         """Solar intensity"""
         params = {
             "parameters": self.param_daily_intensity,
@@ -40,11 +41,11 @@ class SunLightDuration:
         }
 
         try:
-            response = requests.get(
-                self.url_daily, params=params, timeout=30
-            )  # Added timeout
-            response.raise_for_status()  # Raise an HTTPError for bad responses (4xx or 5xx)
-            data = response.json()
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(self.url_daily, params=params)
+                response.raise_for_status()
+                data = response.json()
+
             daily_intensity_data = {}
             if (
                 "properties" in data
@@ -80,7 +81,7 @@ class SunLightDuration:
                 )
             return 0.0
 
-    def get_daily_sunshine_duration(self, date: datetime.date):
+    async def get_daily_sunshine_duration(self, date: datetime.date):
         """Solar sunshine > 120w in hours"""
         date_str = date.strftime("%Y%m%d")
         params = {
@@ -94,9 +95,10 @@ class SunLightDuration:
         }
 
         try:
-            response = requests.get(self.url_hourly, params=params, timeout=30)
-            response.raise_for_status()
-            data = response.json()
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(self.url_hourly, params=params)
+                response.raise_for_status()
+                data = response.json()
 
             if "properties" in data and "parameter" in data["properties"]:
                 irradiance_data = data["properties"]["parameter"][
