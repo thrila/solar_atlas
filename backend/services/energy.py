@@ -7,21 +7,23 @@ class Energy:
         self.duration_of_sunshine = duration_of_sunshine
 
     def number_of_panels(self, expected_output):
+        """amount of panels required to generate expected output (in watts) per day"""
         return math.ceil(
             expected_output / (self.panel_output * self.duration_of_sunshine)
         )
 
-    def amount_of_power(self, panel_number):
+    def amount_of_power(self, panel_number=1):
+        """Enter amount of panels you have. we will cap their output at 330w"""
         return panel_number * (self.panel_output * self.duration_of_sunshine)
 
-    def emission_factor_kg(self, emission_factor_g):
-        return emission_factor_g / 1000
+    def kWh_per_household(self, kWh_per_person, avg_household_size):
+        return float(kWh_per_person) * float(avg_household_size)
 
-    def equavalent_of_trees(self, emission_factor_k):
-        """We are assuming that the tree is 22kg"""
-        return emission_factor_k / 0.22
+    def national_energy_demand(self, kWh_per_person, population):
+        return float(kWh_per_person) * float(population)
 
-    def power_per_year(self, sunshine_hours):
-        return self.panel_output * sunshine_hours * 365
+    def co2_saving_potential(self, kWh_per_person, carbon_intensity):
+        return (float(kWh_per_person) * float(carbon_intensity)) / 1000
 
-    # def approx_setup_cost():
+    def auto_suggest(self):
+        """This should autosuggest solar for places"""

@@ -6,10 +6,13 @@ import "./controller.css";
 import maplibregl from "maplibre-gl";
 import TitleBar from "./components/Titlebar";
 import EnergyInfo from "./components/EnergyInfo";
+import solarData from "../sample.json";
+import PopupPortal from "./components/PopupPortal";
 
 export default function App() {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
+  const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -18,7 +21,7 @@ export default function App() {
       const instance = new maplibregl.Map({
         container: mapRef.current,
         style: ExternalEndpoints.mapStyle,
-        center: [0, 0],
+        center: [32, 15],
         zoom: 2,
       });
       instance.on("click", async (e) => {
@@ -36,11 +39,38 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowPanel((prev) => !prev);
+    }, 5000); // 5000 ms = 5 sec
+
+    return () => clearInterval(interval); // cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    const setHeight = () => {
+      if (mapRef.current) {
+        mapRef.current.style.height = `${window.innerHeight}px`;
+      }
+    };
+
+    setHeight();
+    window.addEventListener("resize", setHeight);
+    return () => window.removeEventListener("resize", setHeight);
+  }, []);
+
   return (
     <MapContext.Provider value={map}>
       <TitleBar />
-      <EnergyInfo />
-      <div ref={mapRef} style={{ width: "100vw", height: "100vh" }} />
+      <PopupPortal>
+        <div
+          className={`fixed md:top-1/3  top-1/2 right-0  w-[24rem] px-5 transition-transform duration-700
+                  ${showPanel ? "translate-x-0" : "translate-x-full"}`}
+        >
+          <EnergyInfo data={solarData} loading={false} />
+        </div>
+      </PopupPortal>
+      <div ref={mapRef} style={{ width: "100vw" }} />
     </MapContext.Provider>
   );
 }

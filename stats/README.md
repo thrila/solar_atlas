@@ -1,8 +1,10 @@
-[Data Source for family size by country](https://www.un.org/development/desa/pd/data/household-size-and-composition?utm_source=chatgpt.com)
-[Data source for total population of countries](https://population.un.org/wpp/downloads?folder=Standard%20Projections&group=Most%20used)
+[Data Source for family size by country](https://www.un.org/development/desa/pd/data/household-size-and-composition)
+[Data source for total population of countries](https://population.un.org/wpp/downloads?folder=Standard%20Projections&group=Most%20used) --- didnt use this 
 [Data for total population of countries](https://data.worldbank.org/indicator/SP.POP.TOTL) --- will probably use this
+
+## Remember to add that some countries was didnt have data in the World data bank
 [Data source for energy consumption per country](https://data.worldbank.org/indicator/EG.USE.ELEC.KH.PC)
-[Data source for carbon intensity](https://ourworldindata.org/grapher/carbon-intensity-electricity?utm_source=chatgpt.com)
+[Data source for carbon intensity](https://ourworldindata.org/grapher/carbon-intensity-electricity)
 Notice that although this is good enough the data collection locations might not be ideal, went for an emprical option instead
 [World estimates on tilt angles paper](https://web.stanford.edu/group/efmh/jacobson/Articles/I/TiltAngles.pdf)
 

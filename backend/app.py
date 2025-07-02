@@ -19,7 +19,7 @@ v1_router = APIRouter(
 
 @app.get("/")
 async def read_root():
-    return {"message": "hello, world"}
+    return {"message": "Hello, world"}
 
 
 @v1_router.post("/")

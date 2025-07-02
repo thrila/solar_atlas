@@ -116,7 +116,7 @@ class SunLightDuration:
             print(f"Error fetching data for {date_str}: {e}")
             return 0.0
 
-    def find_ideal_direction(self, latitude):
+    def find_ideal_azimuth(self, latitude):
         if latitude > 5:
             return 180  # True South
         elif latitude < -5:

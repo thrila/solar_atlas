@@ -38,7 +38,7 @@ export default function TitleBar() {
     }
     resetSearchInput();
     setSuggestions([]);
-    setOpen(!open);
+    setOpen(false);
   };
 
   const renderAdvanced = () => {
@@ -48,12 +48,16 @@ export default function TitleBar() {
   return (
     <header className="w-full absolute top-0 z-10">
       <div
-        className={`flex flex-row items-start items-center space-x-2 w-[99%] border border-[#2A2B30] bg-[rgba(29,30,34,0.6)] text-white px-4 mx-auto my-1 rounded-xl transition-all duration-500 ease-in-out ${
-          open ? "pb-3 pt-2" : "py-2"
-        }`}
+        className={`flex flex-row items-start md:items-center space-x-2 
+  w-full md:w-[24rem] 
+  justify-center md:justify-start 
+  border border-[#2A2B30] bg-[rgba(29,30,34,0.6)] text-white 
+  px-4 mx-auto md:ml-0 md:mr-auto my-1 rounded-xl 
+  transition-all duration-500 ease-in-out 
+  ${open ? "opacity-100 py-3" : "opacity-90 py-2"}`}
       >
         <div className="">
-          <div className="relative w-full transition-all duration-300 ease-in-out">
+          <div className="relative w-full  transition-all duration-300 ease-in-out">
             {/* 🔍 Search Form */}
             <form
               className="flex rounded-full overflow-hidden bg-[#1D1E22] border border-[#2A2B30] shadow-[inset_0_0_1px_#00000066]"
