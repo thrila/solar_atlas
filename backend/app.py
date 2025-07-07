@@ -38,7 +38,7 @@ async def location_name(location: str):
     Receives location data via a POST request.
     The request body should be a JSON object like: {"location": "Some Place"}
     """
-    return post_location_name(location)
+    return await post_location_name(location)
 
 
 @v1_router.post("/coordinates")
@@ -46,7 +46,7 @@ async def location_longitude_latitude(long: float, lat: float):
     """
     Recieves Longitude and Latitude via a post request and returns data
     """
-    return post_long_lat(long, lat)
+    return await post_long_lat(long, lat)
 
 
 @v1_router.post("/estimate_panels")
@@ -54,7 +54,7 @@ async def get_kwh(long: float, lat: float, energy: float):
     """
     Recieves Longitude and Latitude via a post request and returns data
     """
-    return estimate_panels(long, lat, energy)
+    return await estimate_panels(long, lat, energy)
 
 
 @v1_router.post("/estimate_energy")
