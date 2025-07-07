@@ -9,22 +9,29 @@ import datetime
 def get_row(country: str) -> dict[str, float | int]:
     """Get row from table"""
     data = query_db(
-        'SELECT * FROM test_table WHERE "Country Name" = ?', [country], one=True
+        'SELECT * FROM energy WHERE "Country Name" = ?', [country], one=True
     )
-    kco2 = float(data["Carbon intensity of electricity - gCO2/kWh"])
+    kco2 = float(data["Carbon_Intensity_gCO2_per_kWh"])
     return {
-        "average_household_size": data["Avg_Household_Size"],
-        "kWh_per_person": data["kWh_per_person"],
+        "average_household_size": data["Average_Household_Size"],
+        "kWh_per_person": data["Kwh_per_capita"],
         "population": data["Population"],
         "carbon_intensity": kco2,
     }
 
 
 async def get_solar_metadata(lat: float, lon: float, panel_output=330):
-    date = datetime.date(2022, 1, 1)
-    sun_attr = SunLightDuration(lat, lon, "20220101", "20220101")
-    location_name = get_location_name(lat, lon)["location_name"]
-    sunlight_duration = await sun_attr.get_daily_sunshine_duration(date)
+    today_str = datetime.datetime.today() - datetime.timedelta(days=365)
+    yesterday = today_str.strftime("%Y%m%d")
+    sun_attr = SunLightDuration(
+        lat,
+        lon,
+        yesterday,
+        yesterday,
+    )
+    result = await get_location_name(lat, lon)
+    location_name = result["location_name"]
+    sunlight_duration = await sun_attr.get_daily_sunshine_duration()
     solar_intensity = await sun_attr.get_daily_solar_intensity()
     direction = sun_attr.find_ideal_azimuth(lat)
     energy = Energy(panel_output, sunlight_duration)
@@ -40,23 +47,24 @@ async def get_solar_metadata(lat: float, lon: float, panel_output=330):
     }, energy
 
 
-def post_location_name(location: str):
-    coords = get_lon_lat(location)
+async def post_location_name(location: str):
+    coords = await get_lon_lat(location)
     lat = coords["lat"]
     lon = coords["long"]
-    meta_data, energy = get_solar_metadata(lat, lon)
+    meta_data, energy = await get_solar_metadata(lat, lon)
     energy_w = energy.amount_of_power()
 
     return {**meta_data, "energy": energy_w}
 
 
-def post_long_lat(long: float, lat: float):
+async def post_long_lat(long: float, lat: float):
     """
     Logic for the post_long_lat route
     """
-    location_name = get_location_name(lat, long)["location_name"]
+    result = await get_location_name(lat, long)
+    location_name = result["location_name"]
     convert = Conversion()
-    meta_data, energy = get_solar_metadata(lat, long)
+    meta_data, energy = await get_solar_metadata(lat, long)
     energy_w = energy.amount_of_power()
     # NOTE: this data is annually man
     row = get_row(location_name)
@@ -84,9 +92,10 @@ def post_long_lat(long: float, lat: float):
     }
 
 
-def estimate_panels(long: float, lat: float, energy_w: float):
-    location_name = get_location_name(lat, long)["location_name"]
-    meta_data, energy = get_solar_metadata(lat, long)
+async def estimate_panels(long: float, lat: float, energy_w: float):
+    result = await get_location_name(lat, long)
+    location_name = result["location_name"]
+    meta_data, energy = await get_solar_metadata(lat, long)
     convert = Conversion()
 
     # NOTE: this data is annually man
@@ -122,7 +131,8 @@ def estimate_panels(long: float, lat: float, energy_w: float):
 async def estimate_energy(
     long: float, lat: float, number_of_panels: int, panel_output=330
 ):
-    location_name = get_location_name(lat, long)["location_name"]
+    result = await get_location_name(lat, long)
+    location_name = result["location_name"]
     convert = Conversion()
     meta_data, energy = await get_solar_metadata(lat, long, panel_output)
     energy_w = energy.amount_of_power(number_of_panels)
