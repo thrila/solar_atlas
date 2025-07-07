@@ -1,15 +1,16 @@
-import requests
+import httpx
 
 
-def get_lon_lat(location: str) -> dict:
+async def get_lon_lat(location: str) -> dict:
     try:
-        res = requests.get(
-            f"https://nominatim.openstreetmap.org/search?q={location}&format=json",
-            headers={"User-Agent": "fastapi-app"},
-            timeout=5,  # optional: avoid hanging forever
-        )
-        res.raise_for_status()
-        data = res.json()
+        async with httpx.AsyncClient(timeout=5) as client:
+            res = await client.get(
+                "https://nominatim.openstreetmap.org/search",
+                params={"q": location, "format": "json"},
+                headers={"User-Agent": "fastapi-app"},
+            )
+            res.raise_for_status()
+            data = res.json()
 
         if not data:
             return {"error": "location not found"}
@@ -19,27 +20,28 @@ def get_lon_lat(location: str) -> dict:
             "long": float(data[0]["lon"]),
         }
 
-    except requests.exceptions.RequestException as e:
+    except httpx.RequestError as e:
         return {"error": f"request failed: {str(e)}"}
 
     except (KeyError, ValueError, IndexError):
         return {"error": "invalid response from geocoding API"}
 
 
-def get_location_name(lat: float, lon: float) -> dict:
+async def get_location_name(lat: float, lon: float) -> dict:
     try:
-        res = requests.get(
-            f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json",
-            headers={"User-Agent": "fastapi-app"},
-            timeout=5,
-        )
-        res.raise_for_status()
-        data = res.json()
+        async with httpx.AsyncClient(timeout=5) as client:
+            res = await client.get(
+                "https://nominatim.openstreetmap.org/reverse",
+                params={"lat": lat, "lon": lon, "format": "json"},
+                headers={"User-Agent": "fastapi-app"},
+            )
+            res.raise_for_status()
+            data = res.json()
 
         return {
             "location_name": data["address"].get("country", "unknown"),
-            "raw": data,  # optional: inspect full data
+            "raw": data,
         }
 
-    except Exception as e:
+    except httpx.RequestError as e:
         return {"error": f"Reverse geocoding failed: {str(e)}"}

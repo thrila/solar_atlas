@@ -1,6 +1,4 @@
-import requests
 import httpx
-import datetime
 
 
 class SunLightDuration:
@@ -29,7 +27,7 @@ class SunLightDuration:
         self.sunshine_threshold = sunshine_threshold
 
     async def get_daily_solar_intensity(self):
-        """Solar intensity"""
+        """Solar intensity (daily kWh/m²)"""
         params = {
             "parameters": self.param_daily_intensity,
             "community": "RE",
@@ -46,51 +44,35 @@ class SunLightDuration:
                 response.raise_for_status()
                 data = response.json()
 
-            daily_intensity_data = {}
-            if (
-                "properties" in data
-                and "parameter" in data["properties"]
-                and self.param_daily_intensity in data["properties"]["parameter"]
-            ):
-                daily_intensity_data = data["properties"]["parameter"][
-                    self.param_daily_intensity
-                ]
-                print(
-                    f"Successfully retrieved daily solar intensity for {len(daily_intensity_data)} days."
-                )
+            param_data = data.get("properties", {}).get("parameter", {})
+            if self.param_daily_intensity in param_data:
+                daily_data = param_data[self.param_daily_intensity]
+                print(f"Retrieved solar intensity for {len(daily_data)} days.")
+                return daily_data.get(self.start_date, 0.0)
             else:
-                print(
-                    f"Warning: Solar intensity data not found in expected structure for {self.start_date} to {self.end_date}."
-                )
+                print("Warning: Expected solar intensity data not found.")
                 print(data.get("messages", "No specific error messages."))
-            return daily_intensity_data[self.start_date]
+                return 0.0
 
-        except requests.exceptions.Timeout:
-            print(
-                f"Request timed out for daily intensity for {self.start_date} to {self.end_date}."
-            )
+        except httpx.TimeoutException:
+            print(f"Timeout while fetching solar intensity for {self.start_date}.")
             return 0.0
-        except requests.exceptions.RequestException as e:
-            print(
-                f"Error fetching daily solar intensity for {self.start_date} to {self.end_date}: {e}"
-            )
-            if response and response.text:
-                print(
-                    "API Response (error details):",
-                    response.json().get("messages", response.text),
-                )
+        except httpx.HTTPStatusError as e:
+            print(f"HTTP error {e.response.status_code}: {e.response.text}")
+            return 0.0
+        except httpx.RequestError as e:
+            print(f"Request error while fetching solar intensity: {e}")
             return 0.0
 
-    async def get_daily_sunshine_duration(self, date: datetime.date):
-        """Solar sunshine > 120w in hours"""
-        date_str = date.strftime("%Y%m%d")
+    async def get_daily_sunshine_duration(self):
+        """Sunshine duration (hours with irradiance > threshold)"""
         params = {
             "parameters": self.param_hourly_irradiance,
             "community": "RE",
             "latitude": self.latitude,
             "longitude": self.longitude,
-            "start": date_str,
-            "end": date_str,
+            "start": self.start_date,
+            "end": self.start_date,
             "format": "JSON",
         }
 
@@ -100,22 +82,25 @@ class SunLightDuration:
                 response.raise_for_status()
                 data = response.json()
 
-            if "properties" in data and "parameter" in data["properties"]:
-                irradiance_data = data["properties"]["parameter"][
-                    self.param_hourly_irradiance
-                ]
+            param_data = data.get("properties", {}).get("parameter", {})
+            irradiance_data = param_data.get(self.param_hourly_irradiance, {})
 
-                sunshine_hours = 0.0
-                for timestamp, value in irradiance_data.items():
-                    if value is not None and float(value) >= self.sunshine_threshold:
-                        sunshine_hours += (
-                            1.0  # Count 1 hour if irradiance exceeds threshold
-                        )
+            sunshine_hours = sum(
+                1.0
+                for v in irradiance_data.values()
+                if v is not None and float(v) >= self.sunshine_threshold
+            )
 
-                return sunshine_hours
+            return sunshine_hours
 
-        except requests.RequestException as e:
-            print(f"Error fetching data for {date_str}: {e}")
+        except httpx.TimeoutException:
+            print(f"Timeout while fetching sunshine duration for {self.start_date}.")
+            return 0.0
+        except httpx.HTTPStatusError as e:
+            print(f"HTTP error {e.response.status_code}: {e.response.text}")
+            return 0.0
+        except httpx.RequestError as e:
+            print(f"Request error while fetching sunshine duration: {e}")
             return 0.0
 
     def find_ideal_azimuth(self, latitude):
@@ -125,11 +110,3 @@ class SunLightDuration:
             return 0  # True North
         else:
             return 90
-
-
-if __name__ == "__main__":
-    location = SunLightDuration("10.0", "8.0", "20220101", "20220101")
-    ans = location.get_daily_solar_intensity()
-    print(f"solar intensity {ans}")
-    answer = location.get_daily_sunshine_duration(datetime.date(2024, 6, 10))
-    print(answer)
