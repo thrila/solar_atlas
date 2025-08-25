@@ -4,7 +4,7 @@ import { ExternalEndpoints } from "../external_services/endpoints";
 import SearchIcon from "/src/assets/search.svg?react";
 import SettingsIcon from "/src/assets/settings.svg?react";
 import { useMap } from "./MapContext";
-import type { SolarEstimation, TitleBarProps } from "../types/index";
+import type { TitleBarProps } from "../types/index";
 
 export default function TitleBar({
   setShowPanel,

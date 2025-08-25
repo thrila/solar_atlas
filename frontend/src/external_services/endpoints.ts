@@ -55,8 +55,10 @@ export class ExternalEndpoints {
     numberOfPanels,
   }: SolarDataType): Promise<SolarEstimation | null> {
     try {
+      const BaseUrl: string = import.meta.env.VITE_BACKEND_URL;
+      const Port: string = import.meta.env.VITE_BACKEND_PORT;
       const res = await fetch(
-        `http://192.168.0.131:8000/v1/estimate_energy?long=${lon}&lat=${lat}&panel_number=${numberOfPanels}&panel_output=${power}`,
+        `${BaseUrl}:${Port}/v1/estimate_energy?long=${lon}&lat=${lat}&panel_number=${numberOfPanels}&panel_output=${power}`,
         {
           method: "POST",
         },
