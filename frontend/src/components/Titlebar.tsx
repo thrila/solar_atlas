@@ -132,20 +132,38 @@ export default function TitleBar({
               {/*  Advanced Inputs */}
               {open && (
                 <div className="flex space-x-4">
-                  <input
-                    {...panelInput}
-                    type="number"
-                    step="any"
-                    placeholder="no of solar panels"
-                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-xs"
-                  />
-                  <input
-                    {...powerInput}
-                    type="number"
-                    step="any"
-                    placeholder="power per panel (W)"
-                    className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-xs"
-                  />
+                  <div className="relative w-full">
+                    <label
+                      htmlFor="panel-count"
+                      className="absolute -top-2 left-4 bg-[#1D1E22] px-1 text-xs text-[#CFCFCF]"
+                    >
+                      Number of panels
+                    </label>
+                    <input
+                      id="panel-count"
+                      {...panelInput}
+                      type="number"
+                      step="any"
+                      placeholder="e.g., 5"
+                      className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-xs"
+                    />
+                  </div>
+                  <div className="relative w-full">
+                    <label
+                      htmlFor="panel-power"
+                      className="absolute -top-2 left-4 bg-[#1D1E22] px-1 text-xs text-[#CFCFCF]"
+                    >
+                      Panel output power (W)
+                    </label>
+                    <input
+                      id="panel-power"
+                      {...powerInput}
+                      type="number"
+                      step="any"
+                      placeholder="e.g., 330"
+                      className="w-full bg-[#1D1E22] border border-[#2A2B30] text-[#CFCFCF] px-4 py-2 placeholder:italic rounded-full outline-none placeholder:text-xs"
+                    />
+                  </div>
                 </div>
               )}
             </form>
