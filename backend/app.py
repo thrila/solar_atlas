@@ -12,14 +12,14 @@ from logic.main import (
 app = FastAPI()
 
 origins = [
+    "https://solar-atlas.vercel.app",
     "http://localhost:5173",
-    "https://solar-atlas.vercel.app/",
 ]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
