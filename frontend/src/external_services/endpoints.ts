@@ -3,6 +3,8 @@ import type { SolarEstimation, SolarDataType } from "../types/index";
 export class ExternalEndpoints {
   static MAP_TOKEN = import.meta.env.VITE_MAP_TOKEN;
   static mapStyle = `https://api.maptiler.com/maps/darkmatter/style.json?key=${this.MAP_TOKEN}`;
+  static BaseUrl: string = import.meta.env.VITE_BACKEND_URL;
+  static Port: string = import.meta.env.VITE_BACKEND_PORT;
   static async getCoordinatesWithName(location: string) {
     try {
       const res = await fetch(
@@ -19,7 +21,7 @@ export class ExternalEndpoints {
       return { lat: parseFloat(lat), lon: parseFloat(lon) };
     } catch (err) {
       console.error("getCoordinatesWithName failed:", err);
-      return { lat: 0, lon: 0 }; // or throw err to bubble up
+      return { lat: 0, lon: 0 };
     }
   }
   static async getCity(lng: number, lat: number) {
@@ -32,7 +34,7 @@ export class ExternalEndpoints {
       return data;
     } catch (err) {
       console.error("getCity:", err);
-      return null; // or throw err to bubble up
+      return null;
     }
   }
   static async getLocationSuggestion(query: string) {
@@ -49,16 +51,14 @@ export class ExternalEndpoints {
     }
   }
   static async getSolarData({
-    lon,
+    long,
     lat,
     power,
     numberOfPanels,
   }: SolarDataType): Promise<SolarEstimation | null> {
     try {
-      const BaseUrl: string = import.meta.env.VITE_BACKEND_URL;
-      const Port: string = import.meta.env.VITE_BACKEND_PORT;
       const res = await fetch(
-        `${BaseUrl}:${Port}/v1/estimate_energy?long=${lon}&lat=${lat}&panel_number=${numberOfPanels}&panel_output=${power}`,
+        `${this.BaseUrl}:${this.Port}/v1/estimate_energy?long=${long}&lat=${lat}&panel_number=${numberOfPanels}&panel_output=${power}`,
         {
           method: "POST",
         },

@@ -11,6 +11,11 @@ export type SolarDataType = {
   numberOfPanels: number;
 };
 
+export type Suggestion = {
+  name: string;
+  display_name: string;
+};
+
 export type SolarEstimation = {
   location: string;
   daily_solar_irradiance: number;

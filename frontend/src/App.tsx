@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Toaster } from "react-hot-toast";
 import maplibregl from "maplibre-gl";
 import { MapContext } from "./components/MapContext";
 import { ExternalEndpoints } from "./external_services/endpoints";
@@ -28,16 +29,6 @@ export default function App() {
         center: [32, 15],
         zoom: 2,
       });
-      // instance.on("click", async (e) => {
-      //   const { lng, lat } = e.lngLat;
-      //   console.log(lng, lat);
-      //   instance.flyTo({
-      //     center: [lng, lat],
-      //     zoom: 5,
-      //     essential: true,
-      //   });
-      //   setShowPanel(() => true);
-      // });
 
       instance.addControl(new maplibregl.NavigationControl({ showCompass: true }), "bottom-left");
       setMap(instance);
@@ -63,7 +54,23 @@ export default function App() {
         setLocationSolarInfo={setLocationSolarInfo}
         setLoading={setLoading}
       />
-
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            zIndex: 4000,
+            backdropFilter: "blur(20px)",
+            background:
+              "linear-gradient(to top right, rgba(255,255,255,0.1), rgba(255,255,255,0.05), transparent)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: "24px",
+            boxShadow: "0 25px 50px -12px rgba(0,0,0,0.4)",
+            padding: "0.5rem",
+            color: "#E4E4E7",
+          },
+        }}
+      />
       <PopupPortal>
         <div
           className={`fixed md:top-1/3  top-1/2 right-0  w-[24rem] px-5 transition-transform duration-700

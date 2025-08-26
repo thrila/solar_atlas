@@ -4,7 +4,8 @@ import { ExternalEndpoints } from "../external_services/endpoints";
 import SearchIcon from "/src/assets/search.svg?react";
 import SettingsIcon from "/src/assets/settings.svg?react";
 import { useMap } from "./MapContext";
-import type { TitleBarProps } from "../types/index";
+import { type TitleBarProps, type Suggestion } from "../types/index";
+import toast from "react-hot-toast";
 
 export default function TitleBar({
   setShowPanel,
@@ -15,7 +16,7 @@ export default function TitleBar({
   const initialPower = 330; // in watts
 
   const map = useMap();
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<Array<Suggestion>>([]);
   const [searchInput, resetSearchInput] = useInput("");
   const [powerInput] = useInput(initialPower);
   const [panelInput] = useInput(initialPanel);
@@ -52,12 +53,12 @@ export default function TitleBar({
       });
     }
     const test = await ExternalEndpoints.getSolarData({
-      lon,
+      long: lon,
       lat,
       power,
       numberOfPanels,
     });
-    setLocationSolarInfo(test);
+    test && setLocationSolarInfo(test);
     console.log(test);
     setLoading(() => false);
   };
@@ -68,23 +69,27 @@ export default function TitleBar({
   useEffect(() => {
     if (!map) return;
 
-    const handleClick = async (e) => {
+    const handleClick = async (e: any) => {
+      toast.error("Testing");
+      console.log("Testing");
       setLoading(true);
       setShowPanel(true);
       const { lng, lat } = e.lngLat;
       map.flyTo({ center: [lng, lat], zoom: 5, essential: true });
       const data = await ExternalEndpoints.getSolarData({
-        lon: lng,
+        long: lng,
         lat,
         power: powerInput.value,
         numberOfPanels: panelInput.value,
       });
-      setLocationSolarInfo(data);
+      data && setLocationSolarInfo(data);
       setLoading(false);
     };
 
     map.on("click", handleClick);
-    return () => map.off("click", handleClick);
+    return (): void => {
+      map.off("click", handleClick);
+    };
   }, [map, powerInput.value, panelInput.value]);
 
   return (
