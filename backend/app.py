@@ -11,7 +11,10 @@ from logic.main import (
 
 app = FastAPI()
 
-origins = ["http://localhost:5173", "http://192.168.131:5173", "*"]
+origins = [
+    "http://localhost:5173",
+    "https://solar-atlas.vercel.app/",
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
