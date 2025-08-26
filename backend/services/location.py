@@ -29,11 +29,14 @@ async def get_lon_lat(location: str) -> dict:
 
 async def get_location_name(lat: float, lon: float) -> dict:
     try:
-        async with httpx.AsyncClient(timeout=5) as client:
+        async with httpx.AsyncClient(timeout=10) as client:
             res = await client.get(
                 "https://nominatim.openstreetmap.org/reverse",
                 params={"lat": lat, "lon": lon, "format": "json"},
-                headers={"User-Agent": "fastapi-app"},
+                headers={
+                    "User-Agent": "fastapi-app",
+                    "Accept-Language": "en",
+                },
             )
             res.raise_for_status()
             data = res.json()
