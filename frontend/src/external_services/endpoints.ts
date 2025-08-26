@@ -58,7 +58,7 @@ export class ExternalEndpoints {
   }: SolarDataType): Promise<SolarEstimation | null> {
     try {
       const res = await fetch(
-        // NOTE: for local add port
+        // NOTE: for local env add port
         `${this.BaseUrl}/v1/estimate_energy?long=${long}&lat=${lat}&panel_number=${numberOfPanels}&panel_output=${power}`,
         {
           method: "POST",
