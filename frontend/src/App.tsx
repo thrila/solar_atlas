@@ -66,7 +66,7 @@ export default function App() {
             border: "1px solid rgba(255,255,255,0.1)",
             borderRadius: "24px",
             boxShadow: "0 25px 50px -12px rgba(0,0,0,0.4)",
-            padding: "0.5rem",
+            padding: "0.5rem 1rem",
             color: "#E4E4E7",
           },
         }}

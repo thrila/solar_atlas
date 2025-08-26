@@ -52,14 +52,14 @@ export default function TitleBar({
         essential: true,
       });
     }
-    const test = await ExternalEndpoints.getSolarData({
+    const solarData = await ExternalEndpoints.getSolarData({
       long: lon,
       lat,
       power,
       numberOfPanels,
     });
-    test && setLocationSolarInfo(test);
-    console.log(test);
+    solarData && setLocationSolarInfo(solarData);
+    console.log(solarData);
     setLoading(() => false);
   };
 
@@ -70,8 +70,6 @@ export default function TitleBar({
     if (!map) return;
 
     const handleClick = async (e: any) => {
-      toast.error("Testing");
-      console.log("Testing");
       setLoading(true);
       setShowPanel(true);
       const { lng, lat } = e.lngLat;
@@ -82,7 +80,11 @@ export default function TitleBar({
         power: powerInput.value,
         numberOfPanels: panelInput.value,
       });
-      data && setLocationSolarInfo(data);
+      if (data?.location == "Atlantis" ) {
+        toast.error("Country not selected");
+      } else {
+        data && setLocationSolarInfo(data);
+      }
       setLoading(false);
     };
 
