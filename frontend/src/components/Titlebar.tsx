@@ -58,7 +58,12 @@ export default function TitleBar({
       power,
       numberOfPanels,
     });
-    solarData && setLocationSolarInfo(solarData);
+      if (solarData?.location == "Atlantis" ) {
+        toast.error("Country not selected");
+        solarData && setLocationSolarInfo(solarData);
+      } else {
+        solarData && setLocationSolarInfo(solarData);
+      }
     console.log(solarData);
     setLoading(() => false);
   };
@@ -74,16 +79,17 @@ export default function TitleBar({
       setShowPanel(true);
       const { lng, lat } = e.lngLat;
       map.flyTo({ center: [lng, lat], zoom: 5, essential: true });
-      const data = await ExternalEndpoints.getSolarData({
+      const solarData = await ExternalEndpoints.getSolarData({
         long: lng,
         lat,
         power: powerInput.value,
         numberOfPanels: panelInput.value,
       });
-      if (data?.location == "Atlantis" ) {
+      if (solarData?.location == "Atlantis" ) {
         toast.error("Country not selected");
+        solarData && setLocationSolarInfo(solarData);
       } else {
-        data && setLocationSolarInfo(data);
+        solarData && setLocationSolarInfo(solarData);
       }
       setLoading(false);
     };
