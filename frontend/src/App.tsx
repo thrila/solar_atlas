@@ -81,7 +81,7 @@ export default function App() {
           <EnergyInfo data={locationSolarInfo} loading={loading} />
         </div>
       </PopupPortal>
-      <div ref={mapRef} style={{ width: "100vw" }} />
+      <div ref={mapRef} style={{ width: "100vw", height: "100vh" }} />
     </MapContext.Provider>
   );
 }
