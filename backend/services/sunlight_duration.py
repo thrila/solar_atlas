@@ -47,7 +47,7 @@ class SunLightDuration:
             param_data = data.get("properties", {}).get("parameter", {})
             if self.param_daily_intensity in param_data:
                 daily_data = param_data[self.param_daily_intensity]
-                print(f"Retrieved solar intensity for {len(daily_data)} days.")
+                # print(f"Retrieved solar intensity for {len(daily_data)} days.")
                 return daily_data.get(self.start_date, 0.0)
             else:
                 print("Warning: Expected solar intensity data not found.")

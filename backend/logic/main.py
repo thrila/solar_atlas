@@ -31,7 +31,6 @@ async def get_solar_metadata(lat: float, lon: float, panel_output=330):
     )
     result = await get_location_name(lat, lon)
     location_name = result["location_name"]
-    print(location_name)
     sunlight_duration = await sun_attr.get_daily_sunshine_duration()
     solar_intensity = await sun_attr.get_daily_solar_intensity()
     direction = sun_attr.find_ideal_azimuth(lat)
@@ -64,7 +63,6 @@ async def post_long_lat(long: float, lat: float):
     """
     result = await get_location_name(lat, long)
     location_name = result["location_name"]
-    print(location_name)
     convert = Conversion()
     meta_data, energy = await get_solar_metadata(lat, long)
     energy_w = energy.amount_of_power()
@@ -97,7 +95,6 @@ async def post_long_lat(long: float, lat: float):
 async def estimate_panels(long: float, lat: float, energy_w: float):
     result = await get_location_name(lat, long)
     location_name = result["location_name"]
-    print(location_name)
     meta_data, energy = await get_solar_metadata(lat, long)
     convert = Conversion()
 
@@ -136,7 +133,6 @@ async def estimate_energy(
 ):
     result = await get_location_name(lat, long)
     location_name = result["location_name"]
-    print(location_name)
     convert = Conversion()
     meta_data, energy = await get_solar_metadata(lat, long, panel_output)
     energy_w = energy.amount_of_power(number_of_panels)
