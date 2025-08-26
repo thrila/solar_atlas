@@ -41,8 +41,9 @@ async def get_location_name(lat: float, lon: float) -> dict:
             res.raise_for_status()
             data = res.json()
 
+        country = data.get("address", {}).get("country")
         return {
-            "location_name": data["address"].get("country", "unknown"),
+            "location_name": country if country else "Atlantis",
             "raw": data,
         }
 

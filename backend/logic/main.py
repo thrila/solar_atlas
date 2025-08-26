@@ -140,29 +140,41 @@ async def estimate_energy(
     convert = Conversion()
     meta_data, energy = await get_solar_metadata(lat, long, panel_output)
     energy_w = energy.amount_of_power(number_of_panels)
-    row = get_row(location_name)
-    average_household_size = row["average_household_size"]
-    kWh_per_person = row["kWh_per_person"]
-    population = row["population"]
-    carbon_intensity = row["carbon_intensity"]
-    kilowatt_per_household = energy.kWh_per_household(
-        kWh_per_person, average_household_size
-    )
-    national_energy_demand = energy.national_energy_demand(
-        kilowatt_per_household, population
-    )
-    co_saving_potential = energy.co2_saving_potential(
-        convert.watts_to_kilowatts(energy_w) * 365, carbon_intensity
-    )
-
-    return {
-        **meta_data,
-        "location": location_name,
-        "number_of_panels": number_of_panels,
-        "output_power": energy_w,
-        "power_per_household_annually": kilowatt_per_household,
-        "national_energy_demand_annually": national_energy_demand,
-        "carbon_saved_annually": co_saving_potential,
-        "carbon_intensity": carbon_intensity,
-        **row,
-    }
+    if location_name == "Atlantis":
+        return {
+            **meta_data,
+            "location": "Atlantis",
+            "number_of_panels": number_of_panels,
+            "output_power": energy_w,
+            "power_per_household_annually": 0,
+            "national_energy_demand_annually": 0,
+            "carbon_saved_annually": 0,
+            "carbon_intensity": 0,
+            # **row,
+        }
+    else:
+        row = get_row(location_name)
+        average_household_size = row["average_household_size"]
+        kWh_per_person = row["kWh_per_person"]
+        population = row["population"]
+        carbon_intensity = row["carbon_intensity"]
+        kilowatt_per_household = energy.kWh_per_household(
+            kWh_per_person, average_household_size
+        )
+        national_energy_demand = energy.national_energy_demand(
+            kilowatt_per_household, population
+        )
+        co_saving_potential = energy.co2_saving_potential(
+            convert.watts_to_kilowatts(energy_w) * 365, carbon_intensity
+        )
+        return {
+            **meta_data,
+            "location": location_name,
+            "number_of_panels": number_of_panels,
+            "output_power": energy_w,
+            "power_per_household_annually": kilowatt_per_household,
+            "national_energy_demand_annually": national_energy_demand,
+            "carbon_saved_annually": co_saving_potential,
+            "carbon_intensity": carbon_intensity,
+            **row,
+        }
