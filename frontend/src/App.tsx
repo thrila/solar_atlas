@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import maplibregl from "maplibre-gl";
 import { MapContext } from "./components/MapContext";
@@ -35,7 +35,9 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+
     const setHeight = () => {
       if (mapRef.current) {
         mapRef.current.style.height = `${window.innerHeight}px`;
