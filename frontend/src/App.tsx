@@ -35,19 +35,19 @@ export default function App() {
     }
   }, []);
 
-  useLayoutEffect(() => {
-    if (typeof window === "undefined") return;
+  // useLayoutEffect(() => {
+  //   if (typeof window === "undefined") return;
 
-    const setHeight = () => {
-      if (mapRef.current) {
-        mapRef.current.style.height = `${window.innerHeight}px`;
-      }
-    };
+  //   const setHeight = () => {
+  //     if (mapRef.current) {
+  //       mapRef.current.style.height = `${window.innerHeight}px`;
+  //     }
+  //   };
 
-    setHeight();
-    window.addEventListener("resize", setHeight);
-    return () => window.removeEventListener("resize", setHeight);
-  }, []);
+  //   setHeight();
+  //   window.addEventListener("resize", setHeight);
+  //   return () => window.removeEventListener("resize", setHeight);
+  // }, []);
 
   return (
     <MapContext.Provider value={map}>
@@ -81,7 +81,7 @@ export default function App() {
           <EnergyInfo data={locationSolarInfo} loading={loading} />
         </div>
       </PopupPortal>
-      <div ref={mapRef} className="w-screen h-screen" />
+      <div ref={mapRef} className="map-container" />
     </MapContext.Provider>
   );
 }
